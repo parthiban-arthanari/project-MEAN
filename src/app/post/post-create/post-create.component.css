@@ -1,14 +1,37 @@
-
+mat-card{
+  padding: auto;
+}
 
 mat-form-field,
-textarea{
-  margin-left: 1cm;
+textarea {
   width: 80%;
+  margin-top: 2%;
+  margin-left: 5%;
+
+}
+
+mat-spinner {
   margin: auto;
 }
 
-button{
-  width: 25%;
-  margin-bottom: 8px;
-  margin-left: 12px;
+input[type="file"] {
+  visibility: hidden;
+}
+
+.image-preview {
+  height: 5rem;
+  margin: 1rem 0;
+}
+
+.image-preview img {
+  height: 100%;
+}
+
+.pick{
+  margin-left: 5%;
+}
+
+.save{
+  margin-bottom: 2%;
+  margin-left: 5%;
 }

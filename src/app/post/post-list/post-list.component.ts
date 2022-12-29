@@ -2,7 +2,6 @@ import { OnInit } from '@angular/core';
 import { Component, Input } from '@angular/core';
 import { Post } from '../post.model';
 import { PostService } from '../post.service';
-import { Observable } from 'rxjs';
 import { Subscription } from 'rxjs';
 import { OnDestroy } from '@angular/core';
 
@@ -15,7 +14,7 @@ import { OnDestroy } from '@angular/core';
 export class PostListComponent implements OnInit, OnDestroy {
 
   private subscription : Subscription;
-
+  isLoading = false;
   posts: Post[] = [];
   // posts = [
   //   {title : 'First Post' , content : 'First post Content'},
@@ -23,16 +22,22 @@ export class PostListComponent implements OnInit, OnDestroy {
   //   {title : 'Third Post' , content : 'Third post Content'}
   // ]
 
-  constructor(private postService: PostService) { }
+  constructor(public postService: PostService) { }
 
   ngOnInit() {
-    this.posts = this.postService.getPost();
+    this.isLoading = true;
+    this.postService.getPost();
     this.subscription = this.postService.getPostUpdated().subscribe((posts: Post[]) => {
+      this.isLoading = false;
       this.posts = posts;
     });
   }
 
-  ngOnDestroy(): void {
+  onDelete(postId : string){
+    this.postService.onDeletePost(postId);
+  }
+
+  ngOnDestroy() {
       this.subscription.unsubscribe();
   }
 
