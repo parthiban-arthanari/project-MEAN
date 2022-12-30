@@ -15,6 +15,7 @@ import { HeaderComponent } from './header/header.component';
 import { PostListComponent } from './post/post-list/post-list.component';
 import { HttpClientModule } from '@angular/common/http';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import {MatPaginatorModule} from '@angular/material/paginator';
 
 
 @NgModule({
@@ -35,7 +36,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     MatButtonModule,
     MatToolbarModule,
     MatExpansionModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,MatPaginatorModule
   ],
   providers: [],
   bootstrap: [AppComponent]
