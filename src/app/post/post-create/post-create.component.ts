@@ -1,6 +1,8 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, ParamMap } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { Authservice } from 'src/app/auth/auth.service';
 import { Post } from '../post.model';
 import { PostService } from '../post.service';
 import { mimeType } from './mime-type.validator';
@@ -10,7 +12,7 @@ import { mimeType } from './mime-type.validator';
   templateUrl: './post-create.component.html',
   styleUrls: ['./post-create.component.css']
 })
-export class PostCreateComponent implements OnInit {
+export class PostCreateComponent implements OnInit , OnDestroy {
   form : FormGroup;
   post : Post;
   entTitle : string = '';
@@ -19,11 +21,16 @@ export class PostCreateComponent implements OnInit {
   isLoading = false;
   private mode = 'create';
   private postId : string;
+  private authStatusSub : Subscription;
 
-
-  constructor(private postService : PostService, public route : ActivatedRoute){}
+  constructor(private postService : PostService, public route : ActivatedRoute , public authService : Authservice){}
 
   ngOnInit() {
+    this.authStatusSub = this.authService.getAuthStatusListener().subscribe(
+      authStatus => {
+        this.isLoading = false;
+      }
+    );
     this.form = new FormGroup({
       title: new FormControl(null, {
         validators: [Validators.required, Validators.minLength(3)]
@@ -45,7 +52,8 @@ export class PostCreateComponent implements OnInit {
             id: postData._id,
             title: postData.title,
             content: postData.content,
-            imagePath: postData.imagePath
+            imagePath: postData.imagePath,
+            creator : postData.creator
           };
           this.form.setValue({
             title: this.post.title,
@@ -91,5 +99,9 @@ export class PostCreateComponent implements OnInit {
     );
   }
   this.form.reset();
+  }
+
+  ngOnDestroy(){
+    this.authStatusSub.unsubscribe();
   }
 }
